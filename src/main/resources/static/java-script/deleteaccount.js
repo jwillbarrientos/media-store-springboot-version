@@ -8,11 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        const clientId = localStorage.getItem("clientId");
+        if (!clientId) {
+            alert("No client logged in");
+            return;
+        }
+
         try {
-            const response = await myFetch(`/api/deleteaccount`);
+            const response = await myFetch(`/api/clients/${clientId}`, {
+                method: "DELETE"});
             if (response.ok) {
                 alert("Your account was deleted successfully");
-                window.location.href = "/index.html";
+                window.location.href = "/";
             } else {
                 const msg = await response.text();
                 alert("Error deleting account: " + msg);

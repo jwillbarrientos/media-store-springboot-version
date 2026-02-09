@@ -11,7 +11,7 @@ import java.util.Set;
 public class Client extends BaseEntity {
 
     @Getter @Setter
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Getter @Setter
