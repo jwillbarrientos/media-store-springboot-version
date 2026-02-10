@@ -1,25 +1,18 @@
 import { myFetch } from "./myfetch.js";
 
-export function createDeleteButton(tagId, reloadCallback) {
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.dataset.tagId = tagId;
+window.deleteTag = async function(tagId) {
+        if (!confirm("Are you sure you want to delete this tag?")) return;
 
-    deleteBtn.classList.add("tag-action-btn", "delete-btn");
-
-    deleteBtn.addEventListener("click", async () => {
         try {
             const response = await myFetch(`/api/tags/${tagId}`, {
                 method: "DELETE"
             });
-            if (!response.ok) {
-                alert("Error deleting tag");
+            if (response.ok) {
+                location.reload();
                 return;
             }
-            reloadCallback(); // refresh tags list after delete
+            alert("Error deleting tag");
         } catch (err) {
             console.error("Error deleting tag:", err);
         }
-    });
-    return deleteBtn;
 }

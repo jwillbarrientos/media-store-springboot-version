@@ -20,8 +20,21 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
+    public Tag getTagById(Long id) {
+        return tagRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tag not found"));
+    }
+
     public List<Tag> getTagsByClientId(Long clientId) {
         return tagRepository.findTagsByClientId(clientId);
+    }
+
+    public Tag updateTagName(Long id, String newName) {
+        Tag tag = tagRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tag not found"));
+
+        tag.setName(newName);
+        return tagRepository.save(tag);
     }
 
     public void deleteTagById(Long id) {

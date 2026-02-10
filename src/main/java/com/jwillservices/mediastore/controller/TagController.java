@@ -39,10 +39,10 @@ public class TagController {
         return tagService.getTagsByClientId(client.getId());
     }
 
-    //@PatchMapping("/{id}")
-    //public Tag editTag(@PathVariable Long id, @RequestBody Tag request) {
-    //    //nothing yet
-    //}
+    @PatchMapping("/{id}")
+    public Tag editTag(@PathVariable Long id, @RequestParam("name") String newName) {
+        return tagService.updateTagName(id, newName);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteTag(@PathVariable Long id) {

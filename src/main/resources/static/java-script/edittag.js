@@ -1,27 +1,22 @@
 import { myFetch } from "./myfetch.js";
 
-export function createEditButton(tagId, currentName, reloadCallback) {
-    const editBtn = document.createElement("button");
-    editBtn.textContent = "Edit";
-
-    editBtn.classList.add("tag-action-btn", "edit-btn");
-
-    editBtn.addEventListener("click", async () => {
-        const newName = prompt("Enter new tag name:", currentName);
+window.editTag = async function(tagId) {
+        const newName = prompt("Enter new tag name:");
         if (!newName) return;
         try {
-            const response = await myFetch(`/api/edittag?id=${tagId}&name=${encodeURIComponent(newName)}`);
+            const response = await myFetch(`/api/tags/${tagId}?name=${encodeURIComponent(newName)}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: newName })
+            });
 
-            const serverText = await response.text();
-            console.log("Edit response:", response.status, serverText);
+            console.log("Edit response:", response.status);
             if (response.ok) {
-                reloadCallback();
+                location.reload();
             } else {
-                alert("Error updating tag: " + serverText);
+                alert("Error updating tag");
             }
         } catch (err) {
             console.error("Network error while editing:", err);
         }
-    });
-    return editBtn;
 }

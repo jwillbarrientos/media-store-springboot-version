@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (response.ok) {
                 alert("Password updated successfully!");
-                window.location.href = "/index.html";
+                window.location.href = "/";
             } else {
                 const msg = await response.text();
                 alert("Error changing password:" + msg);

@@ -1,9 +1,7 @@
 import { myFetch } from "./myfetch.js";
-import { loadTags } from "./loadtags.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const createTagBtn = document.getElementById("createTag");
-    const tagList = document.getElementById("tagList");
     createTagBtn.addEventListener("click", async () => {
         // Ask for the tag name
         const tagName = prompt("Enter a name for the new tag:");
@@ -15,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify({name: tagName})
             });
             if (response.status === 200) {
-                await loadTags();
+                location.reload();
                 return;
             }
 
