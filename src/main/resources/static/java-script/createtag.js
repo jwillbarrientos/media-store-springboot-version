@@ -9,7 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const tagName = prompt("Enter a name for the new tag:");
         if (!tagName) return;
         try {
-            const response = await myFetch(`/api/addtag?tagName=${encodeURIComponent(tagName)}`);
+            const response = await myFetch("/api/tags", {
+                method: "POST",
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify({name: tagName})
+            });
             if (response.status === 200) {
                 await loadTags();
                 return;

@@ -9,7 +9,9 @@ export function createDeleteButton(tagId, reloadCallback) {
 
     deleteBtn.addEventListener("click", async () => {
         try {
-            const response = await myFetch(`/api/deletetag?id=${tagId}`);
+            const response = await myFetch(`/api/tags/${tagId}`, {
+                method: "DELETE"
+            });
             if (!response.ok) {
                 alert("Error deleting tag");
                 return;

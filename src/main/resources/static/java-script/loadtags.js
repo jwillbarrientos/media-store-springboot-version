@@ -4,7 +4,7 @@ import { createEditButton } from "./edittag.js";
 
 export async function loadTags() {
     try {
-        const response = await myFetch("/api/loadtags");
+        const response = await myFetch("/api/tags");
         if (!response.ok) {
             throw new Error("Failed to load tags");
         }
