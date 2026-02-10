@@ -297,7 +297,7 @@
     <div class="logo">Media-Store</div>
 
     <div class="profile">
-        <span id="userName"></span>
+        <span th:text="${email}"></span>
         <button id="changePasswordBtn">Change Password</button>
         <button id="deleteAccountBtn">Delete Account</button>
         <button id="signOutBtn">Sign Out</button>
@@ -368,7 +368,6 @@
     </div>
 </div>
 
-<script type="module" src="/java-script/getprofilename.js"></script>
 <script type="module" src="/java-script/loadtags.js"></script>
 <script type="module" src="/java-script/createtag.js"></script>
 <script type="module" src="/java-script/edittag.js"></script>
