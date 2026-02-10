@@ -314,7 +314,14 @@
         </div>
         <br>
         <!-- Tags list -->
-        <div id="tagList"></div>
+        <div id="tagList">
+            <div th:each="tag : ${tags}">
+                <span th:text="${tag.name}"
+                      th:onclick="'window.location.href=\'/reels.html?tagId=' + ${tag.id} + '\';'"></span>
+                <button th:onclick="'editTag(' + ${tag.id} + ');'">Edit</button>
+                <button th:onclick="'deleteTag(' + ${tag.id} + ');'">Delete</button>
+            </div>
+        </div>
         <div class="sidebar-actions">
             <button id="showAllBtn" class="sidebar-btn">Show All Videos</button>
             <button id="videosShortBtn" class="sidebar-btn">Short Videos (60s or less)</button>
@@ -368,7 +375,6 @@
     </div>
 </div>
 
-<script type="module" src="/java-script/loadtags.js"></script>
 <script type="module" src="/java-script/createtag.js"></script>
 <script type="module" src="/java-script/edittag.js"></script>
 <script type="module" src="/java-script/deletetag.js"></script>
