@@ -100,7 +100,7 @@
 </div>
 
 <script type="module">
-    import { myFetch } from "../java-script/myfetch.js";
+    import { myFetch } from "/java-script/myfetch.js";
     // ---- Global elements ----
     let videoEl = document.getElementById("video-player");
     const wrapper = document.getElementById("video-wrapper");
@@ -127,7 +127,7 @@
                 videos = JSON.parse(savedList);
                 console.log(`Loaded ${videos.length} videos from localStorage (tag: ${savedTag})`);
             } else {
-                const res = await myFetch(`/api/getvideosforreel?tag=${savedTag}`);
+                const res = await myFetch(`/api/videos/reel?tag=${savedTag}`);
                 if (!res.ok) throw new Error(`Failed to fetch videos (${res.status})`);
                 videos = await res.json();
                 console.log(`Fetched ${videos.length} videos for tag "${savedTag}"`);
@@ -148,14 +148,14 @@
     function loadVideo(index) {
         if (!videos[index]) return;
         const videoId = getVideoId(videos[index]);
-        videoEl.src = `/api/streamingvideos?id=${videoId}`;
+        videoEl.src = `/api/videoactions/${videoId}/stream`;
         videoEl.play();
     }
 
     // ---- Create and slide video ----
     function createVideoElement(id, inheritMuted = true) {
         const v = document.createElement("video");
-        v.src = `/api/streamingvideos?id=${id}`;
+        v.src = `/api/videosactions/${id}/stream`;
         v.autoplay = true;
         v.playsInline = true;
         v.muted = !!inheritMuted;
@@ -235,7 +235,7 @@
     downloadBtn.addEventListener("click", async () => {
         const id = getVideoId(videos[currentIndex]);
         try {
-            const res = await fetch(`/api/downloadvideo?id=${id}`);
+            const res = await fetch(`/api/videoactions/${id}/download`);
             if (!res.ok) { throw new Error("Error downloading the video") }
 
             const blob = await res.blob();
@@ -262,7 +262,7 @@
     });
 
     soundBtn.addEventListener("click", () => { if (!videoEl) return; videoEl.muted = !videoEl.muted; soundBtn.textContent = videoEl.muted ? "🔇" : "🔊"; });
-    homeBtn.addEventListener("click", () => { window.location.href = "/app/welcome-page.html"; });
+    homeBtn.addEventListener("click", () => { window.location.href = "/welcome-page.html"; });
 
     // ---- Click to pause/play ----
     videoEl.addEventListener("click", () => { if (videoEl.paused) videoEl.play(); else videoEl.pause(); });
@@ -273,7 +273,7 @@
         if (!id) return;
         if (!confirm("Are you sure you want to delete this video?")) return;
         try {
-            const res = await myFetch(`/api/deletevideo?id=${id}`, { method: "GET" });
+            const res = await myFetch(`/api/videos/${id}`, { method: "DELETE" });
             if (!res.ok) throw new Error(`Failed (${res.status})`);
             alert("Video deleted successfully!");
             videos.splice(currentIndex, 1);
@@ -287,13 +287,13 @@
     actionBtn.addEventListener("click", async () => {
         const videoId = getVideoId(videos[currentIndex]);
         try {
-            const allTagsRes = await myFetch("/api/loadtagsinreelspage");
+            const allTagsRes = await myFetch("/api/tags");
             if (!allTagsRes.ok) throw new Error("Failed to load all tags");
             const allTags = await allTagsRes.json();
-            const videoTagsRes = await myFetch(`/api/gettagsforvideo?id=${videoId}`);
+            const videoTagsRes = await myFetch(`/api/videos/${videoId}/tags`);
             if (!videoTagsRes.ok) throw new Error("Failed to load video tags");
             const videoTags = await videoTagsRes.json();
-            const assignedTagNames = videoTags.map(t => t.tagId);
+            const assignedTagNames = videoTags.map(t => t.id);
             tagList.innerHTML = "";
             allTags.forEach(tag => {
                 if (!tag) return;
@@ -305,10 +305,10 @@
                 checkbox.addEventListener("change", async () => {
                     try {
                         if (checkbox.checked) {
-                            const res = await myFetch(`/api/addtagtovideo?videoId=${videoId}&tagId=${tag.id}`, {method: "GET"});
+                            const res = await myFetch(`/api/videos/add/tag/${tag.id}/video/${videoId}`, {method: "PATCH"});
                             if (!res.ok) throw new Error("Failed to add tag");
                         } else {
-                            const res = await myFetch(`/api/deletetagvideo?videoId=${videoId}&tagId=${tag.id}`, {method: "GET"});
+                            const res = await myFetch(`/api/videos/delete/tag/${tag.id}/video/${videoId}`, {method: "PATCH"});
                             if (!res.ok) throw new Error("Failed to remove tag");
                         }
                     } catch (err) { console.error("Tag updated error: ", err); alert("Error updating tag."); checkbox.checked = !checkbox.checked; }

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     videosLongBtn.addEventListener('click', async () => {
         try {
-            const response = await myFetch('/api/getvideosforreel?tag=bt60');
+            const response = await myFetch('/api/videos/reel?tag=bt60');
             if (!response.ok) {
                 console.error(`Server returned ${response.status}`);
                 return;
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('selectedTag', 'bt60');
             localStorage.setItem('videoList', JSON.stringify(videos));
 
-            window.location.href = '/app/reels.html';
+            window.location.href = '/reels.html';
         } catch (err) {
             console.error('Error fetching long videos: ', err);
         }

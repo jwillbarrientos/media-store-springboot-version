@@ -56,6 +56,21 @@ public class VideoService {
         return videoRepository.findTop10ByClientOrderByCreationTimestampDesc(client);
     }
 
+    public List<Video> getVideosByTag(Client client, String tag) {
+        if (tag.equals("all")) {
+            return videoRepository.findAllByClient(client);
+        } else if (tag.equals("lte60")) {
+            return videoRepository.findVideosByDurationSecondsIsLessThanEqual(60L);
+        } else if (tag.equals("bt60")) {
+            return videoRepository.findVideosByDurationSecondsIsGreaterThan(60L);
+        } else if (tag.equals("with")) {
+            return videoRepository.findByTagsIsNotEmpty();
+        } else if (tag.equals("without")) {
+            return videoRepository.findByTagsIsEmpty();
+        }
+        return videoRepository.findByTags(tagRepository.getById(Long.parseLong(tag)));
+    }
+
     public Video updateVideo(String name, String path, Long durationOfSeconds, Long fileSize) {
         Video video = videoRepository.findFirstByStateIs(State.SUBMITTED);
         video.setName(name);

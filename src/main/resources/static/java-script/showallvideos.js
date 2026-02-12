@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showAllBtn.addEventListener('click', async() => {
         try {
-            const response = await myFetch('/api/getvideosforreel?tag=all');
+            const response = await myFetch('/api/videos/reel?tag=all');
             if (!response.ok) {
                 console.error(`Server returned ${response.status}`);
                 return;
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('selectTag', 'all');
             localStorage.setItem('videoList', JSON.stringify(videos));
 
-            window.location.href = '/app/reels.html';
+            window.location.href = '/reels.html';
         } catch (err) {
             console.error('Error fetching all videos: ', err)
         }

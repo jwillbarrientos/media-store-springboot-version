@@ -59,11 +59,15 @@ public class VideoController {
         return videoService.getTagsByVideoId(id);
     }
 
-    //@GetMapping("/reel")
-    //public List<Video> getVideosForReel() {
-//
-    //}
-//
+    @GetMapping("/reel")
+    public List<Video> getVideosForReel(@RequestParam String tag, HttpSession session) {
+        Client client = (Client) session.getAttribute("client");
+        if (client == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user logged in");
+        }
+
+        return videoService.getVideosByTag(client, tag);
+    }
 
     @PatchMapping("/add/tag/{tagId}/video/{videoId}")
     public Video addTagToVideo(@PathVariable Long tagId, @PathVariable Long videoId) {

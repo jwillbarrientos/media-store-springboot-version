@@ -25,6 +25,10 @@ public class TagService {
                 .orElseThrow(() -> new RuntimeException("Tag not found"));
     }
 
+    public Tag getTagByClientAndName(Client client, String name) {
+        return tagRepository.findByClientAndName(client, name);
+    }
+
     public List<Tag> getTagsByClientId(Long clientId) {
         return tagRepository.findTagsByClientId(clientId);
     }

@@ -317,7 +317,7 @@
         <div id="tagList">
             <div th:each="tag : ${tags}">
                 <span th:text="${tag.name}"
-                      th:onclick="'window.location.href=\'/reels.html?tagId=' + ${tag.id} + '\';'"></span>
+                      th:onclick="'window.location.href=\'/reels.html?tag=' + ${tag.id} + '\';'"></span>
                 <button class="tag-action-btn edit-btn" th:onclick="'editTag(' + ${tag.id} + ');'">Edit</button>
                 <button class="tag-action-btn delete-btn" th:onclick="'deleteTag(' + ${tag.id} + ');'">Delete</button>
             </div>
