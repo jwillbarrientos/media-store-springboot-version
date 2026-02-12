@@ -1,6 +1,9 @@
 package com.jwillservices.mediastore.downloader;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,12 +17,15 @@ import java.util.Arrays;
 import java.util.Properties;
 
 @Slf4j
+@Component
 public class DownloadVideo {
-    private static Platform platform;
-    private static Executable exe;
-    private static final Properties props = new Properties();
-    private static Process process;
-    public static String downloadVideo(String link) {
+    private Platform platform;
+    private Executable exe;
+    private final Properties props = new Properties();
+    private Process process;
+    @Autowired private AppProps appprops;
+
+    public String downloadVideo(String link) {
         //https://www.tiktok.com/@gertu0k/video/7258798530066713862
         //https://www.instagram.com/reel/DM2mUqnKUYS/?igsh=MWNuOG5leXRjajE0dg==
         //https://www.youtube.com/watch?v=lWHYJOayAUg
@@ -33,7 +39,7 @@ public class DownloadVideo {
         }
     }
 
-    public static String runDownloader(String url) throws IOException, InterruptedException {
+    public String runDownloader(String url) throws IOException, InterruptedException {
         platform = Platform.whatPlatformIs(url);
         if(platform == Platform.YOU_TUBE)
             exe = Executable.YOUTUBE_DL;
@@ -41,10 +47,10 @@ public class DownloadVideo {
             exe = Executable.YT_DLP;
         String[] command;
         log.info("user.dir: {}", System.getProperty("user.dir"));
-        AppProps props = new AppProps();
-        String ytDl = props.getYtDl();
-        String temporalFolder = props.getVideoTemporalPath();
-        String destinyFolder = props.getVideoOutputPath();
+
+        String ytDl = appprops.getYtDl();
+        String temporalFolder = appprops.getVideoTemporalPath();
+        String destinyFolder = appprops.getVideoOutputPath();
         switch (platform) {
             case FACEBOOK:
                 command = buildCommand(ytDl, temporalFolder, url);
@@ -68,8 +74,8 @@ public class DownloadVideo {
                 return null;
         }
         process = Runtime.getRuntime().exec(command);
-        new Thread(DownloadVideo::printProcessOutput, "OutputThread").start();
-        new Thread(DownloadVideo::printProcessErr, "ErrThread").start();
+        new Thread(this::printProcessOutput, "OutputThread").start();
+        new Thread(this::printProcessErr, "ErrThread").start();
         process.waitFor();
         log.debug("Download finished");
         File dir = new File(temporalFolder);
@@ -83,7 +89,7 @@ public class DownloadVideo {
         return target.toString();
     }
 
-    public static void printProcessOutput() {
+    public void printProcessOutput() {
         log.trace("Entering printProcessOutput() with param: {}", process);
         try(BufferedReader reader = new BufferedReader(
                 new InputStreamReader(process.getInputStream()))) {
@@ -97,7 +103,7 @@ public class DownloadVideo {
         log.debug("Printing InputStream of process without exception");
     }
 
-    public static void printProcessErr() {
+    public void printProcessErr() {
         log.trace("Entering printProcessErr() with param: {}", process);
         try(BufferedReader errorReader = new BufferedReader(
                 new InputStreamReader(process.getErrorStream()))) {
@@ -111,7 +117,7 @@ public class DownloadVideo {
         log.debug("Printing ErrorStream of process without Exception");
     }
 
-    public static String[] buildCommand(String downloader, String destinyFolder, String url) {
+    public String[] buildCommand(String downloader, String destinyFolder, String url) {
         log.trace("Entering buildCommand() with params downloader={}, destinyFolder={}, url={}", downloader, destinyFolder, url);
         String[] command = new String[4];
         command[0] = downloader;

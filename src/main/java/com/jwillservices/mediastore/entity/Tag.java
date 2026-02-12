@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -27,7 +29,7 @@ public class Tag extends BaseEntity {
     @ManyToMany(mappedBy = "tags")
     @JsonIgnore
     @Getter @Setter
-    private Set<Video> videos = new HashSet<>();
+    private List<Video> videos = new LinkedList<>();
 
     public Tag() { }
 

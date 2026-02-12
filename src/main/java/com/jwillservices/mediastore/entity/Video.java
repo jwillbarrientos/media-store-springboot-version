@@ -1,10 +1,13 @@
 package com.jwillservices.mediastore.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,6 +18,7 @@ public class Video extends BaseEntity {
     }
 
     @ManyToOne(optional = false)
+    @JsonIgnore
     @Getter @Setter
     private Client client;
 
@@ -34,10 +38,10 @@ public class Video extends BaseEntity {
     private String path;
 
     @Getter @Setter
-    private Integer durationSeconds;
+    private Long durationSeconds;
 
     @Getter @Setter
-    private Integer fileSize;
+    private Long fileSize;
 
     @ManyToMany
     @JoinTable(
@@ -47,21 +51,22 @@ public class Video extends BaseEntity {
             uniqueConstraints = @UniqueConstraint(columnNames = {"VIDEOS_ID", "TAGS_ID"})
 
     )
+    @JsonIgnore
     @Getter @Setter
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags = new LinkedList<>();
 
     public Video() {
     }
 
     public Video(String link, State state, Client client) {
-        this("", link, "", 0, 0, state, client);
+        this("", link, "", 0L, 0L, state, client);
     }
 
     public Video(String name,
                  String link,
                  String path,
-                 Integer durationSeconds,
-                 Integer fileSize,
+                 Long durationSeconds,
+                 Long fileSize,
                  State state,
                  Client client){
         this.name = name;

@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,11 +22,11 @@ public class Client extends BaseEntity {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter @Setter
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags = new LinkedList<>();
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter @Setter
-    private Set<Video> videos = new HashSet<>();
+    private List<Video> videos = new LinkedList<>();
 
     public Client() {}
 

@@ -12,7 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await myFetch(`/api/addvideobylink?link=${encodeURIComponent(videoLink)}`);
+            const response = await myFetch(`/api/videos?link=${encodeURIComponent(videoLink)}`, {
+                method: "POST"
+            });
             const result = await response.text(); // read server response message
 
             if (!response.ok) {

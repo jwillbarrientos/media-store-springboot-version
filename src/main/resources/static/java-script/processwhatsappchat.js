@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append("chatFile", file);
 
         try {
-            const response = await myFetch("/api/processwhatsappchat", {
+            const response = await myFetch("/api/videos/file", {
                 method: "POST",
                 body: formData
             });

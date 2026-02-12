@@ -16,9 +16,11 @@ import java.nio.file.Paths;
 @Component
 public class VideoHelper {
     private final VideoService videoService;
+    private final DownloadVideo downloadVideo;
 
-    VideoHelper(VideoService videoService) {
+    public VideoHelper(VideoService videoService, DownloadVideo downloadVideo) {
         this.videoService = videoService;
+        this.downloadVideo = downloadVideo;
     }
 
     public Runnable backgroundDownloader() {
@@ -26,8 +28,8 @@ public class VideoHelper {
             while(true) {
                 Video video = videoService.getNextVideoToDownload();
                 if (video != null) {
-                    String videoPath = DownloadVideo.downloadVideo(video.getLink());
-                    int durationSecondsVideo = getSeconds(video.getLink());
+                    String videoPath = downloadVideo.downloadVideo(video.getLink());
+                    long durationSecondsVideo = getSeconds(video.getLink());
                     if (videoPath == null) {
                         videoService.updateVideoErr(video);
                     } else {
@@ -35,7 +37,7 @@ public class VideoHelper {
                                 Paths.get(videoPath).getFileName().toString(),
                                 videoPath,
                                 durationSecondsVideo,
-                                (int) new File(videoPath).length()
+                                new File(videoPath).length()
                         );
                     }
                     //videoService.updateVideo(video);

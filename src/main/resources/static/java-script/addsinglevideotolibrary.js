@@ -2,7 +2,7 @@ import { myFetch } from "./myfetch.js";
 
 export async function loadVideos() {
     try {
-        const response = await myFetch("/api/loadvideos");
+        const response = await myFetch("/api/videos");
         if (!response.ok) {
             throw new Error("Failed to load videos");
         }
@@ -24,7 +24,7 @@ export async function loadVideos() {
             videoPlayer.controls = true;
 
             // The browser will request the video from this URL
-            videoPlayer.src = "/api/streamingvideos?id=" + encodeURIComponent(video.id);
+            videoPlayer.src = `/api/videoactions/${encodeURIComponent(video.id)}/stream`;
 
             // ---- Buttons container ----
             const btnContainer = document.createElement("div");
@@ -65,7 +65,7 @@ export async function loadVideos() {
                 if (!videoId) return;
                 if (!confirm("Are you sure you want to delete this video?")) return;
                 try {
-                    const res = await myFetch(`/api/deletevideo?id=${encodeURIComponent(video.id)}`, { method: "GET" });
+                    const res = await myFetch(`/api/videos/${encodeURIComponent(video.id)}`, { method: "DELETE" });
                     if (!res.ok) throw new Error (`Failed to delete (${res.status}`);
                     videoItem.remove();
                 } catch (err) {
@@ -79,7 +79,7 @@ export async function loadVideos() {
             styleButton(downloadBtn);
             downloadBtn.addEventListener("click", async () => {
                 try {
-                    const res = await fetch(`/api/downloadvideo?id=${encodeURIComponent(video.id)}`);
+                    const res = await fetch(`/api/videoactions/${encodeURIComponent(video.id)}/download`);
                     if (!res.ok) { throw new Error("Error downloading the video") }
 
                     const blob = await res.blob();
@@ -112,15 +112,15 @@ export async function loadVideos() {
                 const videoId = video.id;
                 try {
                     // 1. Cargar todos los tags disponibles
-                    const allTagsRes = await myFetch("/api/loadtags"); // endpoint general, no "inreelspage"
+                    const allTagsRes = await myFetch("/api/tags"); // endpoint general, no "inreelspage"
                     if (!allTagsRes.ok) throw new Error("Failed to load all tags");
                     const allTags = await allTagsRes.json();
 
                     // 2. Cargar tags asignados a este video
-                    const videoTagsRes = await myFetch(`/api/gettagsforvideo?id=${videoId}`);
+                    const videoTagsRes = await myFetch(`/api/videos/${videoId}/tags`);
                     if (!videoTagsRes.ok) throw new Error("Failed to load video tags");
                     const videoTags = await videoTagsRes.json();
-                    const assignedTagIds = videoTags.map(t => t.tagId);
+                    const assignedTagIds = videoTags.map(t => t.id);
 
                     // 3. Llenar el modal
                     const tagList = document.getElementById("tag-list");
@@ -136,10 +136,14 @@ export async function loadVideos() {
                         checkbox.addEventListener("change", async () => {
                             try {
                                 if (checkbox.checked) {
-                                    const res = await myFetch(`/api/addtagtovideo?videoId=${videoId}&tagId=${tag.id}`);
+                                    const res = await myFetch(`/api/videos/add/tag/${tag.id}/video/${videoId}`, {
+                                        method: "PATCH"
+                                    });
                                     if (!res.ok) throw new Error("Failed to add tag");
                                 } else {
-                                    const res = await myFetch(`/api/deletetagvideo?videoId=${videoId}&tagId=${tag.id}`);
+                                    const res = await myFetch(`/api/videos/delete/tag/${tag.id}/video/${videoId}`, {
+                                        method: "PATCH"
+                                    });
                                     if (!res.ok) throw new Error("Failed to remove tag");
                                 }
                             } catch (err) {

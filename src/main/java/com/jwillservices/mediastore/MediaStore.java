@@ -27,11 +27,12 @@ public class MediaStore {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(@Autowired VideoHelper videoHelper) {
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        service.submit(videoHelper.backgroundDownloader());
+    public CommandLineRunner commandLineRunner(VideoHelper videoHelper) {
+        //ExecutorService service = Executors.newSingleThreadExecutor();
+        //service.submit(videoHelper.backgroundDownloader());
         return args -> {
-            //repository.save(new Client("Jona@gmail.com", "en la db"));
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            service.submit(videoHelper.backgroundDownloader());
         };
     }
 
