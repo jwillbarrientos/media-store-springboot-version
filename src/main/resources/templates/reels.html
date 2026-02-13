@@ -29,7 +29,7 @@
 </div>
 
 <script type="module">
-    import { myFetch } from "/java-script/myfetch.js";
+    import { myFetch } from "/js/myfetch.js";
     // ---- Global elements ----
     let videoEl = document.getElementById("video-player");
     const wrapper = document.getElementById("video-wrapper");
@@ -191,7 +191,7 @@
     });
 
     soundBtn.addEventListener("click", () => { if (!videoEl) return; videoEl.muted = !videoEl.muted; soundBtn.textContent = videoEl.muted ? "🔇" : "🔊"; });
-    homeBtn.addEventListener("click", () => { window.location.href = "/welcome-page.html"; });
+    homeBtn.addEventListener("click", () => { window.location.href = "/welcome.html"; });
 
     // ---- Click to pause/play ----
     videoEl.addEventListener("click", () => { if (videoEl.paused) videoEl.play(); else videoEl.pause(); });

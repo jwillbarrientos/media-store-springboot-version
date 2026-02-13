@@ -19,11 +19,13 @@
         <button id="signUpBtn">Sign Up</button>
     </small>
 </div>
-<script src="/java-script/login.js"></script>
-<script src="/java-script/signup.js"></script>
+<script th:src="@{/js/login.js}" defer></script>
+<script th:src="@{/js/signup.js}" defer></script>
 <script>
-    attachLoginHandlers();
-    attachSignupHandlers();
+    window.onload = function() {
+        attachLoginHandlers();
+        attachSignupHandlers();
+    };
 </script>
 </body>
 </html>

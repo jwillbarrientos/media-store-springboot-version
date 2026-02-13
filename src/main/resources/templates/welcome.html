@@ -87,23 +87,24 @@
     </div>
 </div>
 
-<script type="module" src="/java-script/createtag.js"></script>
-<script type="module" src="/java-script/edittag.js"></script>
-<script type="module" src="/java-script/deletetag.js"></script>
-<script type="module" src="/java-script/addvideobylink.js"></script>
-<script type="module" src="/java-script/addsinglevideotolibrary.js"></script>
-<script type="module" src="/java-script/processwhatsappchat.js"></script>
-<script type="module" src="/java-script/showvideoswithspecifictag.js"></script>
-<script type="module" src="/java-script/showallvideos.js"></script>
-<script type="module" src="/java-script/showshortvideos.js"></script>
-<script type="module" src="/java-script/showlongvideos.js"></script>
-<script type="module" src="/java-script/showvideoswithtags.js"></script>
-<script type="module" src="/java-script/showvideoswithouttags.js"></script>
-<script type="module" src="/java-script/deleteaccount.js"></script>
-<script type="module" src="/java-script/changepassword.js"></script>
-<script type="module" src="/java-script/signout.js"></script>
+<script type="module" th:src="@{/js/createtag.js}" defer></script>
+<script type="module" th:src="@{/js/edittag.js}" defer></script>
+<script type="module" th:src="@{/js/deletetag.js}" defer></script>
+<script type="module" th:src="@{/js/addvideobylink.js}" defer></script>
+<script type="module" th:src="@{/js/addsinglevideotolibrary.js}" defer></script>
+<script type="module" th:src="@{/js/processwhatsappchat.js}" defer></script>
+<script type="module" th:src="@{/js/showvideoswithspecifictag.js}" defer></script>
+<script type="module" th:src="@{/js/showallvideos.js}" defer></script>
+<script type="module" th:src="@{/js/showshortvideos.js}" defer></script>
+<script type="module" th:src="@{/js/showlongvideos.js}" defer></script>
+<script type="module" th:src="@{/js/showvideoswithtags.js}" defer></script>
+<script type="module" th:src="@{/js/showvideoswithouttags.js}" defer></script>
+<script type="module" th:src="@{/js/deleteaccount.js}" defer></script>
+<script type="module" th:src="@{/js/changepassword.js}" defer></script>
+<script type="module" th:src="@{/js/signout.js}" defer></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    window.onload = function() {
         const fileInput = document.getElementById("whatsappFile");
         const uploadArea = document.getElementById("whatsappUploadArea");
         const uploadText = document.getElementById("uploadText");
@@ -118,7 +119,7 @@
                 uploadText.textContent = `✅ File selected: ${file.name}`;
             }
         });
-    });
+    };
 </script>
 
 </body>

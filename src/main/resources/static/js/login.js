@@ -16,7 +16,7 @@ function attachLoginHandlers() {
         if (response.status === 200) {
             const data = await response.json();
             localStorage.setItem("clientId", data.id);
-            window.location.href = '/welcome-page.html';
+            window.location.href = '/welcome.html';
         } else {
             alert('Login failed');
             console.log('Login failed');

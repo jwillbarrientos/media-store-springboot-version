@@ -23,7 +23,7 @@ public class MvcController {
         return "index";
     }
 
-    @GetMapping("/welcome-page.html")
+    @GetMapping("/welcome.html")
     public String welcomePage(Model model, HttpSession session) {
         Client client = (Client) session.getAttribute("client");
         if (client == null) {
@@ -32,7 +32,7 @@ public class MvcController {
         model.addAttribute("email", client.getEmail());
         List<Tag> tags = tagService.getTagsByClientId(client.getId());
         model.addAttribute("tags", tags);
-        return "welcome-page";
+        return "welcome";
     }
 
     @GetMapping("/reels.html")
