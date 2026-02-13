@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const videos = await response.json();
             console.log(`Fetched ${videos.length} videos (videosWithoutTagsBtn)`);
 
-            localStorage.setItem('selectTag', 'videosWithoutTagsBtn');
+            localStorage.setItem('selectedTag', 'videosWithoutTagsBtn');
             localStorage.setItem('videoList', JSON.stringify(videos));
 
             window.location.href = '/reels.html';

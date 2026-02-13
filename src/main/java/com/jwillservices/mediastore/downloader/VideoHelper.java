@@ -3,7 +3,6 @@ package com.jwillservices.mediastore.downloader;
 import com.jwillservices.mediastore.entity.Video;
 import com.jwillservices.mediastore.service.VideoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -40,7 +39,6 @@ public class VideoHelper {
                                 new File(videoPath).length()
                         );
                     }
-                    //videoService.updateVideo(video);
                     try {
                         log.info("Waiting {} time to download next video", durationSecondsVideo);
                         Thread.sleep(durationSecondsVideo);

@@ -2,12 +2,9 @@ package com.jwillservices.mediastore.controller;
 
 import com.jwillservices.mediastore.dto.UpdatePasswordRequest;
 import com.jwillservices.mediastore.entity.Client;
-import com.jwillservices.mediastore.repository.ClientRepository;
 import com.jwillservices.mediastore.service.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -27,7 +24,6 @@ public class ClientController {
 
     @GetMapping//(produces = "application/json")
     public List<Client> getAllClients() {
-//        return Arrays.asList(new Client("jona@gmail.com", "super password"));
         return clientService.getAllClients();
     }
 

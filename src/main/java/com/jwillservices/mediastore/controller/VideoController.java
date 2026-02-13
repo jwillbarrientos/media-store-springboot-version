@@ -1,6 +1,5 @@
 package com.jwillservices.mediastore.controller;
 
-import com.jwillservices.mediastore.downloader.FileParser;
 import com.jwillservices.mediastore.entity.Client;
 import com.jwillservices.mediastore.entity.Tag;
 import com.jwillservices.mediastore.entity.Video;
