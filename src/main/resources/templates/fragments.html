@@ -1,0 +1,38 @@
+<!-- templates/fragments.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico(v=2)}">
+
+    <title th:text="${title}"> </title>
+
+    <!-- CSS común -->
+
+
+
+    <!-- JS común -->
+<!--    <script th:src="@{/js/main.js}" defer></script>-->
+</head>
+
+<body>
+<!-- Header fragment -->
+<!--<div th:fragment="header">-->
+<!--    <header>-->
+<!--        <h1>Mi Sitio Web</h1>-->
+<!--        <nav>-->
+<!--            <a th:href="@{/}">Inicio</a>-->
+<!--            <a th:href="@{/about}">Acerca</a>-->
+<!--        </nav>-->
+<!--    </header>-->
+<!--</div>-->
+
+<!-- Footer fragment -->
+<!--<div th:fragment="footer">-->
+<!--    <footer>-->
+<!--        <p>&copy; 2026 Mi Sitio Web</p>-->
+<!--    </footer>-->
+<!--</div>-->
+</body>
+</html>
