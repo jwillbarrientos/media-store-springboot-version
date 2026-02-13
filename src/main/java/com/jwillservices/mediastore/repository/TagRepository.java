@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findTagsByClientId(Long clientId);
-    Tag findByClientAndName(Client client, String name);
 }

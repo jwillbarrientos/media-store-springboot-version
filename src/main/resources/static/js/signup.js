@@ -16,7 +16,7 @@ function attachSignupHandlers(){
         if (response.status === 200) {
             const data = await response.json();
             localStorage.setItem("clientId", data.id);
-            window.location.href = '/welcome.html';
+            window.location.href = '/welcome';
         } else {
             alert('Sign up failed');
             console.log('Sign up failed');

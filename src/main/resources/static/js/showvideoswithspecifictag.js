@@ -16,7 +16,7 @@ document.querySelectorAll('.tag-name').forEach(span => {
             localStorage.setItem('selectedTag', tagId);
             localStorage.setItem('videoList', JSON.stringify(videos));
 
-            window.location.href = '/reels.html';
+            window.location.href = '/reels';
         } catch (err) {
             console.error('Error fetching videos for tag: ', err);
         }

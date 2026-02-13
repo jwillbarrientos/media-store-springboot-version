@@ -9,6 +9,7 @@ import com.jwillservices.mediastore.repository.TagRepository;
 import com.jwillservices.mediastore.repository.VideoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,93 +17,91 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final TagRepository tagRepository;
     private final FileParser fileParser;
-    private final List<Video> videos;
 
-    public VideoService(VideoRepository videoRepository, TagRepository tagRepository, FileParser fileParser, List<Video> videos) {
+    public VideoService(VideoRepository videoRepository, TagRepository tagRepository, FileParser fileParser) {
         this.videoRepository = videoRepository;
         this.tagRepository = tagRepository;
         this.fileParser = fileParser;
-        this.videos = videos;
     }
 
     public Video createVideoSubmittedByLink(String link, Client client) {
-        Video video = new Video(link, State.SUBMITTED, client);
-        return videoRepository.save(video);
+        return videoRepository.save(new Video(link, State.SUBMITTED, client));
     }
 
     public List<Video> createVideosSubmittedByFile(String file, Client client) {
         String body = fileParser.parseBody(file);
         String[] links = body.split("\n");
+        List<Video> videos = new ArrayList<>(); // vos me escuchas?sisi
         for (String link : links) {
-            videos.add(this.createVideoSubmittedByLink(link, client));
+            videos.add(createVideoSubmittedByLink(link, client));
         }
         return videos;
     }
 
+    // todo borrar
     public Video getVideoById(Long id) {
         return videoRepository.getById(id);
     }
 
+    // todo borrar
     public List<Tag> getTagsByVideoId(Long id) {
         return videoRepository.getById(id).getTags();
     }
 
-    public Video getNextVideoToDownload() {
-        return videoRepository.findFirstByStateIs(State.SUBMITTED);
-    }
-
+    // todo borrar
     public List<Video> getTheLast10Videos(Client client) {
         return videoRepository.findTop10ByClientOrderByCreationTimestampDesc(client);
     }
 
-    public List<Video> getVideosByTag(Client client, String tag) {
-        if (tag.equals("all")) {
-            return videoRepository.findAllByClient(client);
-        } else if (tag.equals("lte60")) {
-            return videoRepository.findVideosByDurationSecondsIsLessThanEqual(60L);
-        } else if (tag.equals("bt60")) {
-            return videoRepository.findVideosByDurationSecondsIsGreaterThan(60L);
-        } else if (tag.equals("with")) {
-            return videoRepository.findByTagsIsNotEmpty();
-        } else if (tag.equals("without")) {
-            return videoRepository.findByTagsIsEmpty();
+    public enum VideoTag { // todo refactor a otra parte
+        ALL("all"),
+        LESS_THAN_A_MINUTE("lte60"),
+        MORE_THAN_A_MINUTE("bt60"),
+        WITH_TAGS("with"),
+        WITHOUT_TAGS("without"),
+        CUSTOM("custom");
+
+        public final String tagName;
+        VideoTag(String tagName) {
+            this.tagName = tagName;
         }
-        return videoRepository.findByTags(tagRepository.getById(Long.parseLong(tag)));
+
+        public static VideoTag fromName(String tagName) {
+            for (VideoTag defaultTag : VideoTag.values()) {
+                if (defaultTag.tagName.equalsIgnoreCase(tagName)) {
+                    return defaultTag;
+                }
+            }
+            return CUSTOM;
+        }
     }
 
-    public Video updateVideo(String name, String path, Long durationOfSeconds, Long fileSize) {
-        Video video = videoRepository.findFirstByStateIs(State.SUBMITTED);
-        video.setName(name);
-        video.setPath(path);
-        video.setDurationSeconds(durationOfSeconds);
-        video.setFileSize(fileSize);
-        video.setState(Video.State.DOWNLOADED);
-        return videoRepository.save(video);
-    }
-
-    public Video updateVideoErr(Video video) {
-        video.setState(Video.State.ERROR_DOWNLOADING);
-        return videoRepository.save(video);
+    public List<Video> getVideosByTag(Client client, VideoTag tag, String customTag) {
+        switch (tag) {
+            case ALL:                return videoRepository.findAllByClient(client);
+            case LESS_THAN_A_MINUTE: return videoRepository.findVideosByDurationSecondsIsLessThanEqual(60L);
+            case MORE_THAN_A_MINUTE: return videoRepository.findVideosByDurationSecondsIsGreaterThan(60L);
+            case WITH_TAGS:          return videoRepository.findByTagsIsNotEmpty();
+            case WITHOUT_TAGS:       return videoRepository.findByTagsIsEmpty();
+            default:                 return videoRepository.findByTags(tagRepository.getById(Long.parseLong(customTag)));
+        }
     }
 
     public Video addTagToVideo(Long tagId, Long videoId) {
         Tag tag = tagRepository.getById(tagId);
         Video video = videoRepository.getById(videoId);
-        List<Tag> tags = video.getTags();
-        tags.add(tag);
-        video.setTags(tags);
+        video.getTags().add(tag);
         return videoRepository.save(video);
     }
 
     public Video deleteTagFromVideo(Long tagId, Long videoId) {
         Tag tag = tagRepository.getById(tagId);
         Video video = videoRepository.getById(videoId);
-        List<Tag> tags = video.getTags();
-        tags.remove(tag);
-        video.setTags(tags);
+        video.getTags().remove(tag);
         return videoRepository.save(video);
     }
 
+    // todo borrar
     public void deleteVideoById(Long id) {
         videoRepository.deleteById(id);
     }

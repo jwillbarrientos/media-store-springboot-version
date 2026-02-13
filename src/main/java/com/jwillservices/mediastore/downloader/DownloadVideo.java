@@ -19,7 +19,7 @@ import java.util.Properties;
 @Component
 public class DownloadVideo {
     private Platform platform;
-    private Executable exe;
+    private Executable exe; // todo eliminar
     private final Properties props = new Properties();
     private Process process;
     @Autowired private AppProps appprops;
@@ -39,18 +39,18 @@ public class DownloadVideo {
     }
 
     public String runDownloader(String url) throws IOException, InterruptedException {
-        platform = Platform.whatPlatformIs(url);
+        platform = Platform.fromUrl(url);
         if(platform == Platform.YOU_TUBE)
-            exe = Executable.YOUTUBE_DL;
+            exe = Executable.YOUTUBE_DL;// todo eliminar
         else
-            exe = Executable.YT_DLP;
+            exe = Executable.YT_DLP;// todo eliminar
         String[] command;
         log.info("user.dir: {}", System.getProperty("user.dir"));
 
         String ytDl = appprops.getYtDl();
         String temporalFolder = appprops.getVideoTemporalPath();
         String destinyFolder = appprops.getVideoOutputPath();
-        switch (platform) {
+        switch (platform) {// todo eliminar el uso de platform specific code
             case FACEBOOK:
                 command = buildCommand(ytDl, temporalFolder, url);
                 break;

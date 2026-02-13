@@ -191,7 +191,7 @@
     });
 
     soundBtn.addEventListener("click", () => { if (!videoEl) return; videoEl.muted = !videoEl.muted; soundBtn.textContent = videoEl.muted ? "🔇" : "🔊"; });
-    homeBtn.addEventListener("click", () => { window.location.href = "/welcome.html"; });
+    homeBtn.addEventListener("click", () => { window.location.href = "/welcome"; });
 
     // ---- Click to pause/play ----
     videoEl.addEventListener("click", () => { if (videoEl.paused) videoEl.play(); else videoEl.pause(); });

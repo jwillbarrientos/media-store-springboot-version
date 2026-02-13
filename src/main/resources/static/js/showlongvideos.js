@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('selectedTag', 'bt60');
             localStorage.setItem('videoList', JSON.stringify(videos));
 
-            window.location.href = '/reels.html';
+            window.location.href = '/reels';
         } catch (err) {
             console.error('Error fetching long videos: ', err);
         }

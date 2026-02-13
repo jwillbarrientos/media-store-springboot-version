@@ -53,7 +53,3 @@ public class AuthController {
         return client;
     }
 }
-/*
-falta configurar para que hibernate automaticamente cree el esquema de base de datos
-
- */

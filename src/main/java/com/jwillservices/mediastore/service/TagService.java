@@ -15,20 +15,12 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
+    // todo borrar
     public Tag createTag(String name, Client client) {
-        Tag tag = new Tag(name, client);
-        return tagRepository.save(tag);
+        return tagRepository.save(new Tag(name, client));
     }
 
-    public Tag getTagById(Long id) {
-        return tagRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tag not found"));
-    }
-
-    public Tag getTagByClientAndName(Client client, String name) {
-        return tagRepository.findByClientAndName(client, name);
-    }
-
+    // todo borrar
     public List<Tag> getTagsByClientId(Long clientId) {
         return tagRepository.findTagsByClientId(clientId);
     }
@@ -41,6 +33,7 @@ public class TagService {
         return tagRepository.save(tag);
     }
 
+    // todo borrar
     public void deleteTagById(Long id) {
         tagRepository.deleteById(id);
     }

@@ -46,8 +46,6 @@ public class VideoActionsController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found");
         }
 
-        Resource resource = new UrlResource(path.toUri());
-
         String filename = path.getFileName().toString();
         String contentType = Files.probeContentType(path);
         if (contentType == null) {
@@ -57,16 +55,20 @@ public class VideoActionsController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
-                .contentLength(Files.size(path))
-                .body(resource);
+                .contentLength(video.getFileSize())
+                .body(new UrlResource(path.toUri()));
     }
 
     @GetMapping("/{id}/stream")
     public ResponseEntity<Resource> streamVideo(@PathVariable Long id, @RequestHeader HttpHeaders headers) throws IOException {
         Video video = videoService.getVideoById(id);
+        if (video.getState() != Video.State.DOWNLOADED)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Video not available for streaming");
+
         Path path = Paths.get(video.getPath());
         long fileSize = video.getFileSize();
 
+        // todo este bloque de codigo se repite en varios lugares, refactorizar a un metodo aparte
         String contentType = Files.probeContentType(path);
         if (contentType == null) {
             contentType = "application/octet-stream";
@@ -84,6 +86,7 @@ public class VideoActionsController {
 
         long contentLength = rangeEnd - rangeStart + 1;
 
+        // todo use random access file instead of skipping input stream
         InputStream inputStream = Files.newInputStream(path);
         inputStream.skip(rangeStart);
 

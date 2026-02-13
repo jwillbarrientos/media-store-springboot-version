@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('selectedTag', 'with');
             localStorage.setItem('videoList', JSON.stringify(videos));
 
-            window.location.href = '/reels.html';
+            window.location.href = '/reels';
         } catch (err) {
             console.error('Error fetching videos with tags: ', err)
         }

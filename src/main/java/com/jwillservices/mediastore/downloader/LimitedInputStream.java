@@ -4,6 +4,8 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+
+// todo no deberia ser nesesario despues de usar el random access file
 public class LimitedInputStream extends FilterInputStream {
     private long remaining;
 

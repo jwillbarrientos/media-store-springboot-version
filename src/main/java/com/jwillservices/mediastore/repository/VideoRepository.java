@@ -18,5 +18,5 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findVideosByDurationSecondsIsGreaterThan(Long durationSeconds);
     List<Video> findByTagsIsNotEmpty();
     List<Video> findByTagsIsEmpty();
-    List<Video> findByTags(Tag tag);
+    List<Video> findByTags(Tag tags);
 }

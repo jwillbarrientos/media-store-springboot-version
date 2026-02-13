@@ -23,7 +23,7 @@ public class MvcController {
         return "index";
     }
 
-    @GetMapping("/welcome.html")
+    @GetMapping("/welcome")
     public String welcomePage(Model model, HttpSession session) {
         Client client = (Client) session.getAttribute("client");
         if (client == null) {
@@ -35,7 +35,7 @@ public class MvcController {
         return "welcome";
     }
 
-    @GetMapping("/reels.html")
+    @GetMapping("/reels")
     public String reelsPage(HttpSession session) {
         Client client = (Client) session.getAttribute("client");
         if (client == null) {

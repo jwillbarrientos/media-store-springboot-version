@@ -65,12 +65,13 @@ public class VideoController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No user logged in");
         }
 
-        return videoService.getVideosByTag(client, tag);
+        return videoService.getVideosByTag(client, VideoService.VideoTag.fromName(tag), tag);
     }
 
     @PatchMapping("/add/tag/{tagId}/video/{videoId}")
     public Video addTagToVideo(@PathVariable Long tagId, @PathVariable Long videoId) {
         return videoService.addTagToVideo(tagId, videoId);
+
     }
 
     @PatchMapping("/delete/tag/{tagId}/video/{videoId}")

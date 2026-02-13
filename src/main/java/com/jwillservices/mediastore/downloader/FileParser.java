@@ -15,8 +15,9 @@ public class FileParser {
         List<String> links = new ArrayList<>();
         while (matcher.find()) {
             String url = matcher.group(1);
-            Platform platform = Platform.whatPlatformIs(url);
+            Platform platform = Platform.fromUrl(url);
             if (platform.equals(Platform.YOU_TUBE)) {
+                // todo explicar que se hace aca con ejemplos
                 int qIndex = url.indexOf('?');
                 if (qIndex != -1) {
                     String base = url.substring(0, qIndex);
@@ -28,6 +29,7 @@ public class FileParser {
                     links.add(base + "?" + query);
                 }
             } else if (!platform.equals(Platform.INVALID_PLATFORM)){
+                // eliminar todo lo viene despues del ?
                 int qIndex = url.indexOf('?');
                 if (qIndex != -1) {
                     links.add(url.substring(0, qIndex));
