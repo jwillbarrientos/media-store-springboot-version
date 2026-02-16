@@ -12,11 +12,11 @@ import java.util.List;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
     Video findFirstByStateIs(State state);
-    List<Video> findTop10ByClientOrderByCreationTimestampDesc(Client client);
-    List<Video> findAllByClient(Client client);
-    List<Video> findVideosByDurationSecondsIsLessThanEqual(Long durationSeconds);
-    List<Video> findVideosByDurationSecondsIsGreaterThan(Long durationSeconds);
-    List<Video> findByTagsIsNotEmpty();
-    List<Video> findByTagsIsEmpty();
-    List<Video> findByTags(Tag tags);
+    List<Video> findTop10ByClientAndStateOrderByCreationTimestampDesc(Client client, State state);
+    List<Video> findAllByClientAndState(Client client, State state);
+    List<Video> findVideosByDurationSecondsIsLessThanEqualAndState(Long durationSeconds, State state);
+    List<Video> findVideosByDurationSecondsIsGreaterThanAndState(Long durationSeconds, State state);
+    List<Video> findByTagsIsNotEmptyAndState(State state);
+    List<Video> findByTagsIsEmptyAndState(State state);
+    List<Video> findByTagsAndState(Tag tags, State state);
 }

@@ -1,6 +1,5 @@
 package com.jwillservices.mediastore.downloader;
 
-// todo borrar
 public enum Platform {
     YOU_TUBE, INSTAGRAM, TIKTOK, FACEBOOK, INVALID_PLATFORM;
 

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,11 +20,11 @@ public class Client extends BaseEntity {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter @Setter
-    private List<Tag> tags = new LinkedList<>();
+    private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @Getter @Setter
-    private List<Video> videos = new LinkedList<>();
+    private List<Video> videos = new ArrayList<>();
 
     public Client() {}
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,7 +27,7 @@ public class Tag extends BaseEntity {
     @ManyToMany(mappedBy = "tags")
     @JsonIgnore
     @Getter @Setter
-    private List<Video> videos = new LinkedList<>();
+    private List<Video> videos = new ArrayList<>();
 
     public Tag() { }
 

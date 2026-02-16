@@ -2,6 +2,7 @@ package com.jwillservices.mediastore.service;
 
 import com.jwillservices.mediastore.entity.Client;
 import com.jwillservices.mediastore.repository.ClientRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,16 +10,18 @@ import java.util.List;
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
         this.clientRepository = clientRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Client updatePassword(Long id, String newPassword) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
 
-        client.setPassword(newPassword);
+        client.setPassword(passwordEncoder.encode(newPassword));
         return clientRepository.save(client);
     }
 
@@ -27,9 +30,9 @@ public class ClientService {
                 .orElseThrow(() -> new RuntimeException("Client not found"));
     }
 
-    // todo borrar todo lo demas desde aca
-
     public Client createClient(Client client) {
+        // Codificar la contraseña con BCrypt
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
         return clientRepository.save(client);
     }
 
@@ -37,11 +40,10 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public Client findClientByEmailAndPassword(String email, String password) {
-        return clientRepository.findClientByEmailAndPassword(email, password);
+
+    public Client findByEmail(String email) {
+        return clientRepository.findByEmail(email);
     }
-
-
 
     public void deleteClientById(Long id) {
         clientRepository.deleteById(id);

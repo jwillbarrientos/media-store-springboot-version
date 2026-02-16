@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository // no es necesario en springboot si es que esta debajo o al lado de la clase anotada con @SpringBootApplication
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    Client findClientByEmailAndPassword(String email, String password);
+    Client findByEmail(String email);
 }

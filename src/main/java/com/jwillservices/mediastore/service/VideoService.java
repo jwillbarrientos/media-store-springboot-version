@@ -1,6 +1,7 @@
 package com.jwillservices.mediastore.service;
 
 import com.jwillservices.mediastore.downloader.FileParser;
+import com.jwillservices.mediastore.downloader.VideoTag;
 import com.jwillservices.mediastore.entity.Client;
 import com.jwillservices.mediastore.entity.Tag;
 import com.jwillservices.mediastore.entity.Video;
@@ -31,59 +32,21 @@ public class VideoService {
     public List<Video> createVideosSubmittedByFile(String file, Client client) {
         String body = fileParser.parseBody(file);
         String[] links = body.split("\n");
-        List<Video> videos = new ArrayList<>(); // vos me escuchas?sisi
+        List<Video> videos = new ArrayList<>();
         for (String link : links) {
             videos.add(createVideoSubmittedByLink(link, client));
         }
         return videos;
     }
 
-    // todo borrar
-    public Video getVideoById(Long id) {
-        return videoRepository.getById(id);
-    }
-
-    // todo borrar
-    public List<Tag> getTagsByVideoId(Long id) {
-        return videoRepository.getById(id).getTags();
-    }
-
-    // todo borrar
-    public List<Video> getTheLast10Videos(Client client) {
-        return videoRepository.findTop10ByClientOrderByCreationTimestampDesc(client);
-    }
-
-    public enum VideoTag { // todo refactor a otra parte
-        ALL("all"),
-        LESS_THAN_A_MINUTE("lte60"),
-        MORE_THAN_A_MINUTE("bt60"),
-        WITH_TAGS("with"),
-        WITHOUT_TAGS("without"),
-        CUSTOM("custom");
-
-        public final String tagName;
-        VideoTag(String tagName) {
-            this.tagName = tagName;
-        }
-
-        public static VideoTag fromName(String tagName) {
-            for (VideoTag defaultTag : VideoTag.values()) {
-                if (defaultTag.tagName.equalsIgnoreCase(tagName)) {
-                    return defaultTag;
-                }
-            }
-            return CUSTOM;
-        }
-    }
-
     public List<Video> getVideosByTag(Client client, VideoTag tag, String customTag) {
         switch (tag) {
-            case ALL:                return videoRepository.findAllByClient(client);
-            case LESS_THAN_A_MINUTE: return videoRepository.findVideosByDurationSecondsIsLessThanEqual(60L);
-            case MORE_THAN_A_MINUTE: return videoRepository.findVideosByDurationSecondsIsGreaterThan(60L);
-            case WITH_TAGS:          return videoRepository.findByTagsIsNotEmpty();
-            case WITHOUT_TAGS:       return videoRepository.findByTagsIsEmpty();
-            default:                 return videoRepository.findByTags(tagRepository.getById(Long.parseLong(customTag)));
+            case ALL:                return videoRepository.findAllByClientAndState(client, State.DOWNLOADED);
+            case LESS_THAN_A_MINUTE: return videoRepository.findVideosByDurationSecondsIsLessThanEqualAndState(60L, State.DOWNLOADED);
+            case MORE_THAN_A_MINUTE: return videoRepository.findVideosByDurationSecondsIsGreaterThanAndState(60L, State.DOWNLOADED);
+            case WITH_TAGS:          return videoRepository.findByTagsIsNotEmptyAndState(State.DOWNLOADED);
+            case WITHOUT_TAGS:       return videoRepository.findByTagsIsEmptyAndState(State.DOWNLOADED);
+            default:                 return videoRepository.findByTagsAndState(tagRepository.getById(Long.parseLong(customTag)), State.DOWNLOADED);
         }
     }
 
@@ -100,10 +63,4 @@ public class VideoService {
         video.getTags().remove(tag);
         return videoRepository.save(video);
     }
-
-    // todo borrar
-    public void deleteVideoById(Long id) {
-        videoRepository.deleteById(id);
-    }
-
 }

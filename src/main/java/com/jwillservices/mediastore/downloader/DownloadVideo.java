@@ -1,7 +1,9 @@
 package com.jwillservices.mediastore.downloader;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -19,10 +21,20 @@ import java.util.Properties;
 @Component
 public class DownloadVideo {
     private Platform platform;
-    private Executable exe; // todo eliminar
     private final Properties props = new Properties();
     private Process process;
-    @Autowired private AppProps appprops;
+
+    @Value("${ytDl}")
+    private String ytDl;
+    @Value("${videoTemporalPath}")
+    private String videoTemporalPath;
+    @Value("${videoOutputPath}")
+    private String videoOutputPath;
+
+    public String getYtDl() {
+        String os = System.getProperty("os.name").toLowerCase();
+        return os.equals("win") ? ytDl + ".exe" : ytDl;
+    }
 
     public String downloadVideo(String link) {
         //https://www.tiktok.com/@gertu0k/video/7258798530066713862
@@ -40,23 +52,15 @@ public class DownloadVideo {
 
     public String runDownloader(String url) throws IOException, InterruptedException {
         platform = Platform.fromUrl(url);
-        if(platform == Platform.YOU_TUBE)
-            exe = Executable.YOUTUBE_DL;// todo eliminar
-        else
-            exe = Executable.YT_DLP;// todo eliminar
-        String[] command;
         log.info("user.dir: {}", System.getProperty("user.dir"));
 
-        String ytDl = appprops.getYtDl();
-        String temporalFolder = appprops.getVideoTemporalPath();
-        String destinyFolder = appprops.getVideoOutputPath();
-        switch (platform) {// todo eliminar el uso de platform specific code
+        String ytDl = getYtDl();
+        String temporalFolder = videoTemporalPath;
+        String destinyFolder = videoOutputPath;
+        String[] command;
+        switch (platform) {
             case FACEBOOK:
-                command = buildCommand(ytDl, temporalFolder, url);
-                break;
             case YOU_TUBE:
-                command = buildCommand(ytDl, temporalFolder, url);
-                break;
             case INSTAGRAM:
                 command = buildCommand(ytDl, temporalFolder, url);
                 break;
@@ -94,10 +98,10 @@ public class DownloadVideo {
                 new InputStreamReader(process.getInputStream()))) {
             String line;
             while((line = reader.readLine()) != null) {
-                log.debug("{}: {}", exe.name(), line);
+                log.debug("YT-DLP: {}", line);
             }
         } catch (IOException e) {
-            log.error("{}: IOException reading the InputStream of process", exe.name(), e);
+            log.error("YT-DLP: IOException reading the InputStream of process", e);
         }
         log.debug("Printing InputStream of process without exception");
     }
@@ -108,10 +112,10 @@ public class DownloadVideo {
                 new InputStreamReader(process.getErrorStream()))) {
             String line;
             while((line = errorReader.readLine()) != null) {
-                log.error(exe.name() + ": {}", line);
+                log.error("YT-DLP: {}", line);
             }
         } catch (IOException e) {
-            log.error("{}: IOException reading the ErrorStream of process", exe.name(), e);
+            log.error("YT-DLP: IOException reading the ErrorStream of process", e);
         }
         log.debug("Printing ErrorStream of process without Exception");
     }

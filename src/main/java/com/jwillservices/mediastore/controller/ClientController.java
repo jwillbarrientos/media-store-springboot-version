@@ -3,6 +3,8 @@ package com.jwillservices.mediastore.controller;
 import com.jwillservices.mediastore.dto.UpdatePasswordRequest;
 import com.jwillservices.mediastore.entity.Client;
 import com.jwillservices.mediastore.service.ClientService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class ClientController {
         return clientService.getClientById(id);
     }
 
-    @GetMapping//(produces = "application/json")
+    @GetMapping
     public List<Client> getAllClients() {
         return clientService.getAllClients();
     }
