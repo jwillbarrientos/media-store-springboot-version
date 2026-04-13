@@ -30,7 +30,6 @@ public class MvcController {
 
     @GetMapping("/welcome")
     public String welcomePage(Model model, Principal principal) {
-        // Obtener cliente para acceder a su ID
         Client client = clientService.findByEmail(principal.getName());
         if (client != null) {
             List<Tag> tags = tagRepository.findTagsByClientId(client.getId());
