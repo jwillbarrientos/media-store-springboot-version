@@ -2,10 +2,6 @@
 
 A self-hosted web application for downloading, organizing, and streaming videos from YouTube, Facebook, Instagram, and TikTok. Built with Spring Boot and powered by yt-dlp.
 
-![Java](https://img.shields.io/badge/Java-8-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.5.10-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-blue)
-
 ## Features
 
 - **Multi-platform video downloads** — YouTube, Facebook, Instagram, and TikTok supported via [yt-dlp](https://github.com/yt-dlp/yt-dlp)
