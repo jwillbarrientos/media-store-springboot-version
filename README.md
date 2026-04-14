@@ -179,7 +179,3 @@ src/main/resources/
 | Instagram | `instagram.com`, `instagr.am` |
 | TikTok | `tiktok.com` |
 | Facebook | `facebook.com`, `fb.watch` |
-
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
