@@ -17,6 +17,8 @@ A self-hosted web application for downloading, organizing, and streaming videos 
 - **User accounts** — Registration, login, and per-user video libraries with Spring Security
 - **Background processing** — Videos are queued and downloaded asynchronously every 10 seconds
 
+https://github.com/user-attachments/assets/f9668c35-fe23-4b5f-9532-eb3eaa7e5a71
+
 ## Tech Stack
 
 | Layer | Technology |
